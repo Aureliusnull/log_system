@@ -38,7 +38,25 @@
     definitions
 */
 
-#define LOG_CURRENT_VERSION 1.0 
+#define LOG_CURRENT_VERSION 1.1 
+
+#if defined cache_get_field_content
+    #define LOG_MYSQL_TAG:
+#else
+    #define LOG_MYSQL_TAG: MySQL:
+#endif
+
+#if defined cache_get_field_content
+    #define cache_get_value_name_float(%0,%1,%2) %2=cache_get_field_content_float(%0,%1,g_log_sql_handle)
+#endif
+
+#if defined cache_get_field_content
+    #define cache_get_value_name_int(%0,%1,%2) %2=cache_get_field_content_int(%0,%1,g_log_sql_handle)
+#endif
+
+#if defined cache_get_field_content
+    #define cache_get_value_name(%0,%1,%2,%3) cache_get_field_content(%0,%1,%2,g_log_sql_handle,%3)
+#endif
 
 #if !defined DB_LOGS
     #define DB_LOGS "logs"
@@ -93,7 +111,7 @@ enum E_PLAYER_TEMP_LOG_INFO
 */
 
 static 
-    MySQL: g_log_sql_handle,
+    LOG_MYSQL_TAG: g_log_sql_handle,
 #if defined LOG_TELEGRAM_BOT
     TGBot:g_log_telegram_bot,
 #endif
@@ -195,7 +213,7 @@ stock Log_Add(const playerid, const E_LOG_TYPE: type, const message[], const val
             VALUES \
                 (%d, '%e', %d, '%e') \
         ",
-            type,
+            _:type,
             player_name,
             value,
             message
@@ -358,6 +376,11 @@ public OnGameModeInit()
 {
     print("----------------------------------");
     printf("Log system: система успешно загружена. Версия: %.1f", LOG_CURRENT_VERSION);
+#if defined cache_get_field_content
+    print("Поддержка версий MySQL: R38 - R39");
+#else
+    print("Поддержка версий MySQL: R40 - R41");
+#endif
     print("by: aureliusnull\nСпециально для pawn-wiki.ru");
     print("----------------------------------");
 
