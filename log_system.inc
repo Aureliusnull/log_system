@@ -385,7 +385,9 @@ public OnGameModeInit()
     print("----------------------------------");
 
     Log_Init();
+#if defined LOG_TELEGRAM_BOT
     Log_InitTelegramBot();
+#endif
 
     #if defined log_OnGameModeInit
         return log_OnGameModeInit();
